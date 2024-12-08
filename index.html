@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Je t'aime Valentine</title>
+    <link rel="stylesheet" href="style.css"/>
+
+</head>
+<body>
+    <div class="container">
+        <div class="text">
+            <div id="desktop">
+                <h1 class="nickname"></h1>
+                <h1 class="title">je t'aime depuis</h1>
+                <h2 class="compteur"></h2>
+                <h2 class="title"> et je t'aimerais jusqu'à la fin des temps.</h2>
+            </div>
+            <div id="mobile">
+                <div class="module">
+                    <div class="module__item__small"></div>
+                    <div class="module__item"><h1 class="nickname"></h1></div>
+                    <div class="module__item"><h1 class="title">je t'aime depuis</h1></div>
+                    <div class="module__item"><h2 class="compteur"></h2></div>
+                    <div class="module__item"><h2 class="title">et je t'aimerais jusqu'à</h2></div>
+                    <div class="module__item"><h2 class="title">la fin des temps.</h2></div>
+                    <div class="module__item__small"></div>
+                </div>
+            </div>
+        </div>
+
+
+        
+
+
+        <div class="first-heart">
+        </div>
+        <script src="anime.min.js"></script>
+        <script>
+
+            const nicknames = new Array('Mon coeur', 'Mon chat', 'Mon Chaton', 'Mon amour', 'Ma chérie', 'Mon amoureuse', 'Mon rayon de soleil');
+
+            const container = document.querySelector('.container');
+
+            for (var i = 1; i <= 125; i++) {
+                const hearts = document.createElement('div');
+                if (i % 2 == 0) {
+                    hearts.classList.add('heart');
+
+                }
+                else {
+                    hearts.classList.add('heart-pink');
+                }
+
+                container.appendChild(hearts);
+            }
+
+            function isMobile() {
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            function inLandscape() {
+                if (window.matchMedia("(orientation: landscape)").matches) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            function animateHearts() {
+                var w = window.innerWidth / 2;
+                var h = window.innerHeight / 2;
+                anime({
+                    targets: ['.heart-pink', '.heart'],
+                    translateX: function () {
+                        return anime.random(-w, w);
+                    },
+                    translateY: function () {
+                        return anime.random(-h, h);
+                    },
+                    rotate: 45,
+                    scale: function () {
+                        return anime.random(1, 5);
+                    },
+                    easing: 'easeInOutBack',
+                    duration: 3000,
+                    delay: anime.stagger(10),
+                    complete: animateHearts
+                })
+            }
+
+            function monthDiff(d1, d2) {
+                var months;
+                months = (d2.getFullYear() - d1.getFullYear()) * 12;
+                months -= d1.getMonth() + 1;
+                months += d2.getMonth() + 1;
+                return months <= 0 ? 0 : months;
+            }
+
+            function calcDate(){
+
+                const dt_date1 = new Date('July 6, 2022');
+                const dt_date2 = new Date(Date.now());
+
+                //Get the Timestamp
+                const date1_time_stamp = dt_date1.getTime();
+                const date2_time_stamp = dt_date2.getTime();
+
+                let calc;
+
+                //Check which timestamp is greater
+                if (date1_time_stamp > date2_time_stamp) {
+                    calc = new Date(date1_time_stamp - date2_time_stamp);
+                } else {
+                    calc = new Date(date2_time_stamp - date1_time_stamp);
+                }
+                //Retrieve the date, month and year
+                const calcFormatTmp = calc.getDate() + '-' + (calc.getMonth() + 1) + '-' + calc.getFullYear();
+                //Convert to an array and store
+                const calcFormat = calcFormatTmp.split("-");
+                //Subtract each member of our array from the default date
+                const secondes_passed =calc.getSeconds();
+                const minutes_passed = calc.getMinutes();
+                const hours_passed = calc.getHours();
+                const days_passed = Number(Math.abs(calcFormat[0]) - 1);
+                const months_passed = Number(Math.abs(calcFormat[1]) - 1);
+                const years_passed = Number(Math.abs(calcFormat[2]) - 1970);
+                //Set up custom text
+                const yrsTxt = ["an", "ans"];
+                const mnthsTxt = ["mois", "mois"];
+                const daysTxt = ["jour", "jours"];
+                const hoursTxt = ["heure", "heures"];
+                const minutesTxt = ["minute","minutes"];
+                const secondesTxt = ["seconde", "secondes"]
+
+                //Convert to days and sum together
+                const total_days = (years_passed * 365) + (months_passed * 30.417) + days_passed;
+
+                //display result with custom text
+                const result = ((years_passed == 1) ? years_passed + ' ' + yrsTxt[0] + ' ' : (years_passed > 1) ?
+                    years_passed + ' ' + yrsTxt[1] + ' ' : '') +
+                    ((months_passed == 1) ? months_passed + ' ' + mnthsTxt[0] : (months_passed > 1) ?
+                        months_passed + ' ' + mnthsTxt[1] + ' ' : '') +
+                    ((days_passed == 1) ? days_passed + ' ' + daysTxt[0] : (days_passed > 1) ?
+                        days_passed + ' ' + daysTxt[1] + ' ' : '') +
+                    ((hours_passed == 1) ? hours_passed + ' ' + hoursTxt[0] : (hours_passed > 1) ?
+                    hours_passed + ' ' + hoursTxt[1] + ' ' : '') +
+                    ((isMobile() == true) ? '<br/>' : '') +
+                    ((minutes_passed == 1) ? minutes_passed + ' ' + minutesTxt[0] : (minutes_passed > 1) ?
+                    minutes_passed + ' ' + minutesTxt[1] + ' ' : '') +
+                    ((secondes_passed == 1) ? secondes_passed + ' ' + secondesTxt[0] : (secondes_passed > 1) ?
+                    secondes_passed + ' ' + secondesTxt[1] : '');
+
+
+                document.getElementsByClassName('compteur')[0].innerHTML = result.trim();
+                document.getElementsByClassName('compteur')[1].innerHTML = result.trim();
+            }
+
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            }
+
+            function getNickname() {
+                document.getElementsByClassName('nickname')[0].innerHTML = nicknames[getRandomInt(nicknames.length - 1)];
+                document.getElementsByClassName('nickname')[1].innerHTML = nicknames[getRandomInt(nicknames.length - 1)];
+            }
+
+            function showDivForDevice() {
+                if (isMobile()) {
+                    document.getElementById("desktop").style.display = "none";
+                    document.getElementById("mobile").style.display = "visible";
+                } else {
+                    document.getElementById("desktop").style.display = "visible";
+                    document.getElementById("mobile").style.display = "none";
+                }
+            }
+
+            function turnMobile() {
+                if (isMobile()) {
+
+                    if (inLandscape()) {
+                        var nodes = document.querySelectorAll('.module__item__small');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.height = '10%';
+                        }
+
+                        var nodes = document.querySelectorAll('.module__item');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.height = '20%';
+                        }
+
+                        var nodes = document.querySelectorAll('.title');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.fontSize = '45px';
+                        }
+
+                        var nodes = document.querySelectorAll('.compteur');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.fontSize = '45px';
+                        }
+
+                        var nodes = document.querySelectorAll('.nickname');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.fontSize = '100px';
+                        }
+                    }
+                    else {
+                        var nodes = document.querySelectorAll('.module__item__small');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.height = '26%';
+                        }
+
+                        var nodes = document.querySelectorAll('.module__item');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.height = '12%';
+                        }
+
+                        var nodes = document.querySelectorAll('.title');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.fontSize = '55px';
+                        }
+
+                        var nodes = document.querySelectorAll('.compteur');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.fontSize = '55px';
+                        }
+
+                        var nodes = document.querySelectorAll('.nickname');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].style.fontSize = '110px';
+                        }
+                    }
+                }
+            }
+
+            getNickname();
+            calcDate();
+            animateHearts();
+            showDivForDevice();
+            turnMobile();
+            const chronoInterval = setInterval(() => { calcDate() }, 1000);
+            const nicknameInterval = setInterval(() => { getNickname() }, 2500);
+
+
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+            window.addEventListener('resize', () => {
+                let vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+                turnMobile();
+            });
+
+            
+
+        </script>
+</body>
+</html>
